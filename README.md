@@ -12,13 +12,16 @@ run tests with
 
 ## usage
 
-run demo using:
+run demo through npm-script using:
 
-  > npm run demo -s "STOPPOINT_ID" -l "LINE_ID"
-  > npm run demo --stoppointid "STOPPOINT_ID" --lineid "LINE_ID"
+  > npm run demo -- -s "STOPPOINT_ID" -l "LINE_ID"
+  > npm run demo -- --stoppointid "STOPPOINT_ID" --lineid "LINE_ID"
   > npm run demo -- --help
 
-eg:
+alternatively directly with node using:
+  > node index -s "STOPPOINT_ID" -l "LINE_ID"
+
+e.g
   > node index -s "940GZZLUWLO" -l "bakerloo"
 
 ## dependencies
