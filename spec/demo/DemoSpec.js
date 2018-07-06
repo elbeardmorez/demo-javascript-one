@@ -25,7 +25,7 @@ describe("Lib", function() {
 
   describe("# send_arrival", function() {
     it("send_Arrival", function() {
-      result = Lib.send_arrival("data");
+      result = Lib.send_arrival("940GZZLUWLO", "bakerloo", "data");
       expect(fs.existsSync(result)).toBe(true);
     });
   });
