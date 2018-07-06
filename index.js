@@ -2,7 +2,7 @@
 const program = require('commander');
 var Lib = require('./lib/Lib');
 
-var TIMEOUT = 1; // seconds
+var TIMEOUT = 30; // seconds
 
 var id_stoppoint = "stop-point";
 var id_line = "line";
@@ -39,7 +39,9 @@ var run = (args) => {
     process.exit();
   }
 
-  // refresh state on interval
+  // update now!
+  refresh();
+  // update on interval
   setInterval(refresh, TIMEOUT * 1000);
 }
 
