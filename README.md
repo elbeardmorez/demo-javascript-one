@@ -40,12 +40,11 @@ with StopPoint ID: 940GZZLUWLO
 https://api.tfl.gov.uk/Line/bakerloo/Arrivals/940GZZLUWLO?direction=inbound
 
 # todo:
--fix npm run usage
--command arg parsing
--testing (jasmine)
 -processing data
+-more tests
 
 # done
+-fix npm run usage
 -entry point
 -command line arg parsing
 -test stubs
