@@ -61,13 +61,40 @@ var run = (args) => {
 
   // listen for send_arrival requests
   router.get("/", (req, res) => {
-    if ("arrival" in req.query) {
-      var data = Lib.send_arrival(id_stoppoint, id_line, JSON.stringify(state.data));
-      res.send(JSON.stringify(data));
-    } else if ("arrivals" in req.query) {
-      var data = Lib.send_arrival(id_stoppoint, id_line, JSON.stringify(state.data));
-      res.send(JSON.stringify(data));
+    var msgs = [];
+    var update = false;
+    if ("stoppoint_id" in req.query) {
+      update = true;
+      msgs.push(`stoppoint-id updated: '${req.query.stoppoint_id}'`);
     }
+    if ("line_id" in req.query) {
+      update = true;
+      msgs.push(`line-id updated: '${req.query.line_id}'`);
+    }
+    Promise.resolve(update ? Lib.get_data(req.query.stoppoint_id || id_stoppoint,
+                                          req.query.line_id || id_line,
+                                          state) : false)
+      .then((data) => {
+        debugger;
+        if (data) {
+          if (data == "200") {
+            // set global ids
+            id_stoppoint = req.query.stoppoint_id || id_stoppoint;
+            id_line = req.query.line_id || id_line;
+          }
+          else
+            // short-circuit
+            res.send("error updating feed state, check ids!");
+        }
+        if ("arrival" in req.query) {
+          var data = Lib.send_arrival(id_stoppoint, id_line, JSON.stringify(state.data));
+          msgs.push(JSON.stringify(data));
+        } else if ("arrivals" in req.query) {
+          var data = Lib.send_arrival(id_stoppoint, id_line, JSON.stringify(state.data));
+          msgs.push(JSON.stringify(data));
+        }
+        res.send(msgs.join("\n"));
+      });
   });
   router.listen(PORT);
 
