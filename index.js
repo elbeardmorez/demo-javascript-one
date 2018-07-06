@@ -13,7 +13,6 @@ var refresh = () => {
 }
 
 var run = (args) => {
-  debugger;
   program
     .command("demo")
     .usage("[options]")
