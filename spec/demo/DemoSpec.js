@@ -25,11 +25,8 @@ describe("Lib", function() {
 
   describe("# send_arrival", function() {
     it("send_Arrival", function() {
-      result = Lib.send_arrival("data")
-      fs.exists(result, (exists) => {
-        expect().toBeFalsy();
-      });
+      result = Lib.send_arrival("data");
+      expect(fs.existsSync(result)).toBe(true);
     });
   });
-
 });
