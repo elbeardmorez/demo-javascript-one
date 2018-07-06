@@ -1,7 +1,9 @@
 
+const router = require('express')();
 const program = require('commander');
 var Lib = require('./lib/Lib');
 
+var PORT = 9000;
 var TIMEOUT = 30; // seconds
 var REQUEST_ERRORS_MAX = 2;
 var REQUEST_ERRORS = 0;
@@ -57,6 +59,19 @@ var run = (args) => {
 
   // update now!
   refresh();
+
+  // listen for send_arrival requests
+  router.get("/", (req, res) => {
+    if ("arrival" in req.query) {
+      var data = Lib.send_arrival(id_stoppoint, id_line, JSON.stringify(state.data));
+      res.send(JSON.stringify(data));
+    } else if ("arrivals" in req.query) {
+      var data = Lib.send_arrival(id_stoppoint, id_line, JSON.stringify(state.data));
+      res.send(JSON.stringify(data));
+    }
+  });
+  router.listen(PORT);
+
   // update on interval
   setInterval(refresh, TIMEOUT * 1000);
 }
