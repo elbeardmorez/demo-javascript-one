@@ -6,8 +6,8 @@ var TIMEOUT = 30; // seconds
 var REQUEST_ERRORS_MAX = 2;
 var REQUEST_ERRORS = 0;
 
-var id_stoppoint = "stop-point";
-var id_line = "line";
+var id_stoppoint = "stoppoint-id";
+var id_line = "line-id";
 
 var refresh = () => {
   console.log("stoppoint-id: " + id_stoppoint + " | line-id: " + id_line);
