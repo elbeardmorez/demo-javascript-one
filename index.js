@@ -1,5 +1,6 @@
 
 const program = require('commander');
+var Lib = require('./lib/Lib');
 
 var TIMEOUT = 1; // seconds
 
@@ -8,15 +9,17 @@ var id_line = "line";
 
 var refresh = () => {
   console.log("stoppoint-id: " + id_stoppoint + " | line-id: " + id_line);
+  result = Lib.get_data(id_stoppoint, id_line);
 }
 
-var run = (args) {
+var run = (args) => {
+  debugger;
   program
     .command("demo")
     .usage("[options]")
     .option("-s, --stoppointid <required>", "stop-point id")
     .option("-l, --lineid <required>", "line id")
-    .parse(process.argv);
+    .parse(args);
 
   id_stoppoint = program.commands[0].stoppointid
   id_line = program.commands[0].lineid

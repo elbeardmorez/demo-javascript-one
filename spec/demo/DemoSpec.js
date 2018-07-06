@@ -1,6 +1,6 @@
-var fs = require('fs');
 
-describe("Lib", function() {
+/*
+describe("Demo", function() {
   var demo = require('../../index.js');
 
   describe("# cmd line args", function() {
@@ -9,22 +9,27 @@ describe("Lib", function() {
 			expect(false).toBeTruthy();
 		});
 	});
-}
+});
+*/
 
 describe("Lib", function() {
   var Lib = require('../../lib/Lib');
-  var lib;
+  const fs = require('fs');
 
-  beforeEach(function() {
-    lib = new Lib();
+  describe("# get arrival data", function() {
+    it("get_data", function() {
+      result = Lib.get_data("940GZZLUWLO", "bakerloo");
+      expect(result).toEqual(200);
+    });
   });
 
   describe("# send_arrival", function() {
     it("send_Arrival", function() {
-      result = lib.("data")
+      result = Lib.send_arrival("data")
       fs.exists(result, (exists) => {
         expect().toBeFalsy();
       });
     });
   });
+
 });

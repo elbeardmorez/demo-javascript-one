@@ -1,18 +1,32 @@
 # demo-javascript-web
 
 ## solution
--drive arrivals board hardware
---read arrival prediction feeds
---signal when a train is due to arrive
----make announcement
---dump arrival info: 
+aiming to drive arrivals board hardware. need to read arrival prediction feeds, and signal when a train is due to arrive by making an announcement. 
+
+for test purposes, dump required arrival info to a timestamped file.
+
+## testing
+run tests with
+
+  > jasmine
+
+## usage
+
+run demo using:
+
+  > npm run demo -s "STOPPOINT_ID" -l "LINE_ID"
+  > npm run demo --stoppointid "STOPPOINT_ID" --lineid "LINE_ID"
+  > npm run demo -- --help
+
+eg:
+  > node index -s "940GZZLUWLO" -l "bakerloo"
 
 ## dependencies
 -jasmine
 -commander
 -moment
 
-## data
+## data information
 -line status, stops, journey planning, arrival predictions
 
 -stop points
@@ -23,14 +37,15 @@ with StopPoint ID: 940GZZLUWLO
 https://api.tfl.gov.uk/Line/bakerloo/Arrivals/940GZZLUWLO?direction=inbound
 
 # todo:
+-fix npm run usage
 -command arg parsing
 -testing (jasmine)
+-processing data
 
 # done
 -entry point
+-command line arg parsing
 -test stubs
 -library stubs
 --send_arrival(text)
 --send_following_arrivals([list of text])
-
-
