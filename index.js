@@ -3,13 +3,26 @@ const program = require('commander');
 var Lib = require('./lib/Lib');
 
 var TIMEOUT = 30; // seconds
+var REQUEST_ERRORS_MAX = 2;
+var REQUEST_ERRORS = 0;
 
 var id_stoppoint = "stop-point";
 var id_line = "line";
 
 var refresh = () => {
   console.log("stoppoint-id: " + id_stoppoint + " | line-id: " + id_line);
-  result = Lib.get_data(id_stoppoint, id_line);
+  Promise.resolve(Lib.get_data(id_stoppoint, id_line))
+    .then((data) => {
+      if (data == "200")
+        REQUEST_ERRORS = 0;
+      else {
+        REQUEST_ERRORS++;
+        if (REQUEST_ERRORS >= REQUEST_ERRORS_MAX) {
+          console.log(`\ntoo many (>${REQUEST_ERRORS_MAX}) request errors`);
+          process.exit();
+        }
+      }
+    });
 }
 
 var run = (args) => {

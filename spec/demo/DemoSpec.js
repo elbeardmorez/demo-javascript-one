@@ -17,9 +17,12 @@ describe("Lib", function() {
   const fs = require('fs');
 
   describe("# get arrival data", function() {
-    it("get_data", function() {
-      result = Lib.get_data("940GZZLUWLO", "bakerloo");
-      expect(result).toEqual(200);
+    it("get_data", function(done) {
+      Promise.resolve(Lib.get_data("940GZZLUWLO", "bakerloo"))
+        .then((data) => {
+           expect(data).toEqual(200);
+           done();
+        });
     });
   });
 
