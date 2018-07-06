@@ -1,0 +1,19 @@
+{
+  "name": "demo-javascript-web",
+  "version": "0.0.1",
+  "description": "demo javascript web",
+  "main": "index.js",
+  "scripts": {
+    "demo": "node index.js",
+    "test": "jasmine"
+  },
+  "author": "Pete Beardmore",
+  "license": "ISC",
+  "devDependencies": {
+    "jasmine": "^3.1.0"
+  },
+  "dependencies": {
+    "commander": "^2.16.0",
+    "moment": "^2.22.2"
+  }
+}
