@@ -8,8 +8,8 @@ var TIMEOUT = 30; // seconds
 var REQUEST_ERRORS_MAX = 2;
 var REQUEST_ERRORS = 0;
 
-var id_stoppoint = "stoppoint-id";
-var id_line = "line-id";
+var id_stoppoint = "940GZZLUWLO";
+var id_line = "bakerloo";
 
 var state = {}
 
@@ -39,22 +39,21 @@ var run = (args) => {
     .option("-l, --lineid <required>", "line id")
     .parse(args);
 
-  id_stoppoint = program.commands[0].stoppointid
-  id_line = program.commands[0].lineid
-
   var help = (program) => {
     console.log('%s', program.helpInformation());
   };
 
-  if (!id_stoppoint) {
+  if (program.commands[0].stoppointid)
+    id_stoppoint = program.commands[0].stoppointid
+  else {
     help(program);
-    console.log("missing stoppoint id!");
-    process.exit();
+    console.log(`no stoppoint id specified, defaulting to '${id_stoppoint}'!`);
   }
-  if (!id_line) {
+  if (program.commands[0].lineid)
+    id_line = program.commands[0].lineid
+  else {
     help(program);
-    console.log("missing line id!");
-    process.exit();
+    console.log(`no line id specified, defaulting to '${id_line}'!`);
   }
 
   // update now!
