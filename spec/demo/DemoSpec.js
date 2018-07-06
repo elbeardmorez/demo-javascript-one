@@ -18,9 +18,11 @@ describe("Lib", function() {
 
   describe("# get arrival data", function() {
     it("get_data", function(done) {
-      Promise.resolve(Lib.get_data("940GZZLUWLO", "bakerloo"))
+      var state = {}
+      Promise.resolve(Lib.get_data("940GZZLUWLO", "bakerloo", state))
         .then((data) => {
            expect(data).toEqual(200);
+           expect(Object.keys(state).length).toBeGreaterThan(0);
            done();
         });
     });

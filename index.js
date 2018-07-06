@@ -9,12 +9,16 @@ var REQUEST_ERRORS = 0;
 var id_stoppoint = "stoppoint-id";
 var id_line = "line-id";
 
+var state = {}
+
 var refresh = () => {
   console.log("stoppoint-id: " + id_stoppoint + " | line-id: " + id_line);
-  Promise.resolve(Lib.get_data(id_stoppoint, id_line))
+  Promise.resolve(Lib.get_data(id_stoppoint, id_line, state))
     .then((data) => {
-      if (data == "200")
+      if (data == "200") {
         REQUEST_ERRORS = 0;
+        Lib.send_arrival(id_stoppoint, id_line, JSON.stringify(state.data));
+      }
       else {
         REQUEST_ERRORS++;
         if (REQUEST_ERRORS >= REQUEST_ERRORS_MAX) {
