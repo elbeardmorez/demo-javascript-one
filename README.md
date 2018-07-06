@@ -25,29 +25,30 @@ e.g
   > node index -s "940GZZLUWLO" -l "bakerloo"
 
 ## dependencies
--jasmine
--commander
--moment
+- jasmine
+- commander
+- moment
 
 ## data information
 -line status, stops, journey planning, arrival predictions
 
 -stop points
-https://api.tfl.gov.uk/line/24/stoppoints
+  https://api.tfl.gov.uk/line/24/stoppoints
 
 -arrivals e.g.
 with StopPoint ID: 940GZZLUWLO
-https://api.tfl.gov.uk/Line/bakerloo/Arrivals/940GZZLUWLO?direction=inbound
+  https://api.tfl.gov.uk/Line/bakerloo/Arrivals/940GZZLUWLO?direction=inbound
 
 # todo:
--processing data
--more tests
+- processing data
+- more tests
 
 # done
--fix npm run usage
--entry point
--command line arg parsing
--test stubs
--library stubs
---send_arrival(text)
---send_following_arrivals([list of text])
+- fix npm run usage
+- entry point
+- command line arg parsing
+- test stubs
+- library stubs
+ - send_arrival(text)
+ - send_following_arrivals([list of text])
+
