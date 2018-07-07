@@ -67,10 +67,13 @@ with StopPoint ID: 940GZZLUWLO
   https://api.tfl.gov.uk/Line/bakerloo/Arrivals/940GZZLUWLO?direction=inbound
 
 # todo:
-- processing data
 - more tests
+- document formatting
+- map for numbers to words
 
 # done
+- announcement / display formatting
+- processing data
 - add config module for port, default ids, max error etc.
 - respond to incorrect ids without bringing service down
 - fix npm run usage

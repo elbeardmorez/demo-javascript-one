@@ -2,3 +2,6 @@ default_stoppoint_id: '940GZZLUWLO'
 default_line_id: 'bakerloo'
 request_errors_max: 2
 port: 9000
+display_format: '{platformName}\n{expectedArrival}: {towards}  | {timeToStation}'
+announce_format: 'the train arriving at {platformName} is the {expectedArrival} {lineName} service towards {towards}'
+time_format: 'HH:mm'
