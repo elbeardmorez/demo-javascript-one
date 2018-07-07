@@ -11,8 +11,22 @@ var REQUEST_ERRORS = 0;
 var id_stoppoint = 'default_stoppoint_id' in config ? config.default_stoppoint_id : '940GZZLUWLO';
 var id_line_id = 'default_line_id' in config ? config.default_line_id : 'bakerloo';
 
+var state = {data: []};
 
-var state = {}
+var push_arrivals = () => {
+  var display_format = 'display_format' in config ? config.display_format :
+                        '{platformName}\n{expectedArrival}: {towards}  | {timeToStation}';
+  var arrivals = [];
+  var arrivals_max = 'following_arrivals_max' in config ? config.following_arrivals_max : 5;
+  for (i = 0; i < arrivals_max; i++) {
+    if (i >= state.data.length)
+      break;
+    var d = state.data[i];
+    var arrival_text = Lib.format_data(display_format, d);
+    arrivals.push(arrival_text);
+  }
+  Lib.send_following_arrivals(id_stoppoint, id_line, arrivals);
+}
 
 var refresh = () => {
   console.log("stoppoint-id: " + id_stoppoint + " | line-id: " + id_line);
@@ -99,8 +113,8 @@ var run = (args) => {
   });
   router.listen(PORT);
 
-  // update on interval
-  setInterval(refresh, TIMEOUT * 1000);
+  // push following arrivals on interval
+  setInterval(push_arrivals, TIMEOUT * 1000);
 }
 
 run(process.argv);

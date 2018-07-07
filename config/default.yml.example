@@ -5,3 +5,4 @@ port: 9000
 display_format: '{platformName}\n{expectedArrival}: {towards}  | {timeToStation}'
 announce_format: 'the train arriving at {platformName} is the {expectedArrival} {lineName} service towards {towards}'
 time_format: 'HH:mm'
+following_arrivals_max: 5
