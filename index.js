@@ -1,15 +1,16 @@
-
+var config = require('config');
 const router = require('express')();
 const program = require('commander');
 var Lib = require('./lib/Lib');
 
-var PORT = 9000;
-var TIMEOUT = 30; // seconds
-var REQUEST_ERRORS_MAX = 2;
+var PORT = 'port' in config ? config.port : 9000;
+var TIMEOUT = 60; // seconds
+var REQUEST_ERRORS_MAX = 'request_errors_max' in config ? config.request_errors_max : 2;
 var REQUEST_ERRORS = 0;
 
-var id_stoppoint = "940GZZLUWLO";
-var id_line = "bakerloo";
+var id_stoppoint = 'default_stoppoint_id' in config ? config.default_stoppoint_id : '940GZZLUWLO';
+var id_line_id = 'default_line_id' in config ? config.default_line_id : 'bakerloo';
+
 
 var state = {}
 

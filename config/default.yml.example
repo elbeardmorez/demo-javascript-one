@@ -1,0 +1,4 @@
+default_stoppoint_id: '940GZZLUWLO'
+default_line_id: 'bakerloo'
+request_errors_max: 2
+port: 9000

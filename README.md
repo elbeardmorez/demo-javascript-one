@@ -54,6 +54,7 @@ or
 - commander
 - moment
 - express
+- config
 
 ## data information
 -line status, stops, journey planning, arrival predictions
@@ -68,9 +69,9 @@ with StopPoint ID: 940GZZLUWLO
 # todo:
 - processing data
 - more tests
-- config module for poll, port, default ids etc.
 
 # done
+- add config module for port, default ids, max error etc.
 - respond to incorrect ids without bringing service down
 - fix npm run usage
 - entry point
