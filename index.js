@@ -29,7 +29,7 @@ const ioi = [
 
 var push_arrivals = () => {
   var display_format = 'display_format' in config ? config.display_format :
-                        '{platformName}\n{expectedArrival}: {towards}  | {timeToStation}';
+                        '{platformName}\n{expectedArrival}: {lineName} -> {towards} | {timeToStation}';
   var arrivals = [];
   var arrivals_max = 'following_arrivals_max' in config ? config.following_arrivals_max : 5;
   for (i = 0; i < arrivals_max; i++) {
