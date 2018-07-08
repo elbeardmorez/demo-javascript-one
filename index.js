@@ -39,6 +39,7 @@ var push_arrivals = () => {
       else {
         var display_format = 'display_format' in config ? config.display_format :
                               '{platformName}\n{expectedArrival}: {lineName} -> {towards} | {timeToStation}';
+        var time_format = 'time_format' in config ? config.time_format : 'HH:mm';
         var arrivals_max = 'following_arrivals_max' in config ? config.following_arrivals_max : 5;
         for (i = 0; i < arrivals_max; i++) {
           if (i >= state.data.length)
@@ -46,7 +47,7 @@ var push_arrivals = () => {
           var d = state.data[i];
           // update the 'time to station' field!
           d.timeToStation = (moment(d.expectedArrival) - moment()) / 1000;
-          var arrival_text = Lib.format_data(display_format, d);
+          var arrival_text = Lib.format_data(d, display_format, time_format);
           arrivals.push(arrival_text);
         }
       }
@@ -72,10 +73,11 @@ var remove_prediction = (id) => {
 var queue_announcements = () => {
   var announce_format = 'announce_format' in config ? config.announce_format :
                         "the train arriving at {platformName} is the {expectedArrival} {lineName} service towards {towards}";
+  var time_format = 'time_format' in config ? config.time_format : 'HH:mm';
   var data = state.data;
   for (var i = data.length - 1; i >= 0; i--) {
     var d = data[i];
-    var announce_text = format_data(announce_format, d);
+    var announce_text = Lib.format_data(d, announce_format, time_format);
     var announce_timer_id = setTimeout(() => {((d, announce_text, update) => {
         Lib.send_arrival(d.naptanId, d.lineId, announce_text);
         update(d.id);

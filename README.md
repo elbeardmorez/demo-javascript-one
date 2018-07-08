@@ -96,13 +96,13 @@ at:
   Gloucester Road's Circle Line [stoppoint-id: 940GZZLUGTR, line-id: circle]
 
 # todo:
-- remove config use in lib module
 - option to force period update (no accounting for stale data / new trains / delays etc. as it stands)
 - map for numbers to words
 - prefer inline promisification
 - more tests
 
 # done
+- remove config use in lib module
 - fix fixed timeToStation in following arrivals data
 - document formatting
 - display arrivals from web api call

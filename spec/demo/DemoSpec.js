@@ -81,7 +81,7 @@ describe("Lib", function() {
 
   describe("# format_data", function() {
     it("merges data items to a format string", function() {
-      result = Lib.format_data("towards {towards}", {'towards': "Upminster"});
+      result = Lib.format_data({'towards': "Upminster"}, "towards {towards}");
       expect(result).toEqual("towards Upminster");
     });
   });
