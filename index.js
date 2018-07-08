@@ -12,6 +12,7 @@ var id_stoppoint = 'default_stoppoint_id' in config ? config.default_stoppoint_i
 var id_line = 'default_line_id' in config ? config.default_line_id : 'bakerloo';
 
 var state = {data: []};
+var updates_on = true; // testing/debugging
 
 // items of interest
 const ioi = [
@@ -43,10 +44,15 @@ var push_arrivals = () => {
 
 // remove prediction
 var remove_prediction = (id) => {
-  state.data = state.data.filter((o) => { return o.id != id; });
-  console.log(`removed id: ${id} from arrivals queue [count: ${state.data.length}]`);
-  if (state.data.length == 0)
-    refresh();
+  return new Promise((resolve, reject) => {
+    state.data = state.data.filter((o) => { return o.id != id; });
+    console.log(`removed id: ${id} from arrivals queue [count: ${state.data.length}]`);
+    if (state.data.length == 0)
+      Promise.resolve(refresh())
+        .then(resolve);
+    else
+      resolve();
+  });
 }
 
 // queue predictions for announcement
@@ -84,6 +90,9 @@ var process_data = () => {
 };
 
 var refresh = () => {
+  if (!updates_on)
+     return;
+
   console.log("refreshing arrival predictions for stoppoint-id: " + id_stoppoint + " | line-id: " + id_line);
   return Promise.resolve(Lib.get_data(id_stoppoint, id_line, state))
     .then((data) => {

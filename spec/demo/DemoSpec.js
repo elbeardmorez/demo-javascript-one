@@ -1,7 +1,22 @@
 var rewire = require('rewire');
 
+var data = { data: [{
+  destinationName: 'Elephant & Castle Underground Station',
+  expectedArrival: '2018-07-08T07:47:53Z',
+  id: '253952329',
+  lineId: 'bakerloo',
+  lineName: 'Bakerloo',
+  naptanId: '940GZZLUWLO',
+  platformName: 'Southbound - Platform 4',
+  timeToStation: 149,
+  towards: 'Elephant and Castle'
+}]}
+
 describe("Demo", function() {
   var demo = rewire('../../index.js');
+  beforeEach(() => {
+    demo.__set__('updates_on', false);
+  });
 
   describe("# command line args", function() {
     it('sets ids', () => {
@@ -10,6 +25,28 @@ describe("Demo", function() {
 			expect(demo.__get__('id_stoppoint')).toEqual("stop-x");
 		});
 	});
+
+ describe("# remove_predictions", function() {
+    beforeEach(() => {
+      state = Object.assign({}, data);
+      demo.__set__('state', state);
+      jasmine.DEFAULT_TIMEOUT_INTERVAL = 10000;
+    })
+
+    it("removes a predition from the state data", function() {
+			demo.__get__('remove_prediction')('253952329');
+			expect(demo.__get__('state').data.length).toEqual(0);
+    });
+
+    it("removes the last predition expecting an update to be triggered", function(done) {
+      demo.__set__('updates_on', true);
+      Promise.resolve(demo.__get__('remove_prediction')('253952329'))
+        .then(() => {
+          expect(demo.__get__('state').data.length).toBeGreaterThan(0);
+          done();
+        });
+    });
+  });
 });
 
 describe("Lib", function() {
