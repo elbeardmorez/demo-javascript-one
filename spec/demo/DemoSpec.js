@@ -53,8 +53,8 @@ describe("Lib", function() {
   var Lib = require('../../lib/Lib');
   const fs = require('fs');
 
-  describe("# get arrival data", function() {
-    it("get_data", function(done) {
+  describe("# get_data", function() {
+    it("gets arrival data from tfl", function(done) {
       var state = {}
       Promise.resolve(Lib.get_data("940GZZLUWLO", "bakerloo", state))
         .then((data) => {
@@ -66,7 +66,7 @@ describe("Lib", function() {
   });
 
   describe("# send_arrival", function() {
-    it("send_Arrival", function() {
+    it("sends an arrival announcement", function() {
       result = Lib.send_arrival("940GZZLUWLO", "bakerloo", "data");
       expect(fs.existsSync(result)).toBe(true);
     });
