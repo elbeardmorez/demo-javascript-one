@@ -104,7 +104,6 @@ var run = (args) => {
                                           req.query.line_id || id_line,
                                           state) : false)
       .then((data) => {
-        debugger;
         if (data) {
           if (data == "200") {
             // set global ids
