@@ -28,6 +28,23 @@ var push_arrivals = () => {
   Lib.send_following_arrivals(id_stoppoint, id_line, arrivals);
 }
 
+// queue predictions for announcement
+var queue_announcements = () => {
+  var announce_format = 'announce_format' in config ? config.announce_format :
+                        "the train arriving at {platformName} is the {expectedArrival} {lineName} service towards {towards}";
+  var data = state.data;
+  for (var i = data.length - 1; i >= 0; i--) {
+    var d = data[i];
+    var announce_text = format_data(announce_format, d);
+    var announce_timer_id = setTimeout(() => {((d, announce_text, state) => {
+        Lib.send_arrival(d.naptanId, d.lineId, announce_text);
+        state.data = state.data.filter((o) => { return o.id != d.id; });
+        console.log(`removed id: ${d.id} from arrivals queue [count: ${state.data.length}]`);
+      })(d, announce_text, state)}, d.timeToStation * 1000);
+    d.announce_timer_id = announce_timer_id; // TODO: race condition
+  }
+}
+
 var refresh = () => {
   console.log("stoppoint-id: " + id_stoppoint + " | line-id: " + id_line);
   Promise.resolve(Lib.get_data(id_stoppoint, id_line, state))
@@ -35,6 +52,7 @@ var refresh = () => {
       if (data == "200") {
         REQUEST_ERRORS = 0;
         push_arrivals();
+        queue_announcements();
       }
       else {
         REQUEST_ERRORS++;
