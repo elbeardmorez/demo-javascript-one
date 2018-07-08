@@ -28,6 +28,14 @@ var push_arrivals = () => {
   Lib.send_following_arrivals(id_stoppoint, id_line, arrivals);
 }
 
+// remove prediction
+var remove_prediction = (id) => {
+  state.data = state.data.filter((o) => { return o.id != id; });
+  console.log(`removed id: ${id} from arrivals queue [count: ${state.data.length}]`);
+  if (state.data.length == 0)
+    refresh();
+}
+
 // queue predictions for announcement
 var queue_announcements = () => {
   var announce_format = 'announce_format' in config ? config.announce_format :
@@ -36,17 +44,16 @@ var queue_announcements = () => {
   for (var i = data.length - 1; i >= 0; i--) {
     var d = data[i];
     var announce_text = format_data(announce_format, d);
-    var announce_timer_id = setTimeout(() => {((d, announce_text, state) => {
+    var announce_timer_id = setTimeout(() => {((d, announce_text, update) => {
         Lib.send_arrival(d.naptanId, d.lineId, announce_text);
-        state.data = state.data.filter((o) => { return o.id != d.id; });
-        console.log(`removed id: ${d.id} from arrivals queue [count: ${state.data.length}]`);
-      })(d, announce_text, state)}, d.timeToStation * 1000);
+        update(d.id);
+      })(d, announce_text, remove_prediction)}, d.timeToStation * 1000);
     d.announce_timer_id = announce_timer_id; // TODO: race condition
   }
 }
 
 var refresh = () => {
-  console.log("stoppoint-id: " + id_stoppoint + " | line-id: " + id_line);
+  console.log("refreshing arrival predictions for stoppoint-id: " + id_stoppoint + " | line-id: " + id_line);
   return Promise.resolve(Lib.get_data(id_stoppoint, id_line, state))
     .then((data) => {
       if (data == "200") {
