@@ -47,11 +47,10 @@ var queue_announcements = () => {
 
 var refresh = () => {
   console.log("stoppoint-id: " + id_stoppoint + " | line-id: " + id_line);
-  Promise.resolve(Lib.get_data(id_stoppoint, id_line, state))
+  return Promise.resolve(Lib.get_data(id_stoppoint, id_line, state))
     .then((data) => {
       if (data == "200") {
         REQUEST_ERRORS = 0;
-        push_arrivals();
         queue_announcements();
       }
       else {
@@ -88,9 +87,6 @@ var run = (args) => {
     help(program);
     console.log(`no line id specified, defaulting to '${id_line}'!`);
   }
-
-  // update now!
-  refresh();
 
   // listen for send_arrival requests
   router.get("/", (req, res) => {
@@ -130,9 +126,14 @@ var run = (args) => {
       });
   });
   router.listen(PORT);
-
   // push following arrivals on interval
   setInterval(push_arrivals, TIMEOUT * 1000);
+
+  // update state now!
+  Promise.resolve(refresh())
+    .then(() => {
+      push_arrivals();
+    });
 }
 
 run(process.argv);
