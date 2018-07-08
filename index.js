@@ -84,16 +84,13 @@ var run = (args) => {
 
   if (program.commands[0].stoppointid)
     id_stoppoint = program.commands[0].stoppointid
-  else {
-    help(program);
+  else
     console.log(`no stoppoint id specified, defaulting to '${id_stoppoint}'!`);
-  }
+
   if (program.commands[0].lineid)
     id_line = program.commands[0].lineid
-  else {
-    help(program);
+  else
     console.log(`no line id specified, defaulting to '${id_line}'!`);
-  }
 
   // listen for send_arrival requests
   router.get("/", (req, res) => {
