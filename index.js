@@ -34,7 +34,7 @@ var refresh = () => {
     .then((data) => {
       if (data == "200") {
         REQUEST_ERRORS = 0;
-        Lib.send_arrival(id_stoppoint, id_line, JSON.stringify(state.data));
+        push_arrivals();
       }
       else {
         REQUEST_ERRORS++;
