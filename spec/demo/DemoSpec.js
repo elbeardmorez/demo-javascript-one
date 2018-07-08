@@ -1,16 +1,16 @@
+var rewire = require('rewire');
 
-/*
 describe("Demo", function() {
-  var demo = require('../../index.js');
+  var demo = rewire('../../index.js');
 
-  describe("# cmd line args", function() {
-    it('exits 0', () => {
-			result = demo.run(["sddfgs", "sdfa"]);
-			expect(false).toBeTruthy();
+  describe("# command line args", function() {
+    it('sets ids', () => {
+			demo.__get__('run')(["dummy_command", "dummy_module", "-s", "stop-x", "-l", "line-y"]);
+			expect(demo.__get__('id_line')).toEqual("line-y");
+			expect(demo.__get__('id_stoppoint')).toEqual("stop-x");
 		});
 	});
 });
-*/
 
 describe("Lib", function() {
   var Lib = require('../../lib/Lib');

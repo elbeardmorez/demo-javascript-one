@@ -9,7 +9,7 @@ var REQUEST_ERRORS_MAX = 'request_errors_max' in config ? config.request_errors_
 var REQUEST_ERRORS = 0;
 
 var id_stoppoint = 'default_stoppoint_id' in config ? config.default_stoppoint_id : '940GZZLUWLO';
-var id_line_id = 'default_line_id' in config ? config.default_line_id : 'bakerloo';
+var id_line = 'default_line_id' in config ? config.default_line_id : 'bakerloo';
 
 var state = {data: []};
 
@@ -171,4 +171,5 @@ var run = (args) => {
     });
 }
 
-run(process.argv);
+if (require.main === module)
+  run(process.argv);

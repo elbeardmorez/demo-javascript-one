@@ -50,11 +50,12 @@ or
   http://localhost/?stoppoint_id=940GZZLUWLO&line_id=bakerloo
 
 ## dependencies
-- jasmine
 - commander
 - moment
 - express
 - config
+- jasmine (dev)
+- rewire (dev)
 
 ## data information
 -line status, stops, journey planning, arrival predictions
