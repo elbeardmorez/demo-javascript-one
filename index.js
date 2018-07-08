@@ -2,6 +2,7 @@ var config = require('config');
 const router = require('express')();
 const program = require('commander');
 const fs = require('fs');
+const moment = require('moment');
 var Lib = require('./lib/Lib');
 
 var PORT = 'port' in config ? config.port : 9000;
@@ -43,6 +44,8 @@ var push_arrivals = () => {
           if (i >= state.data.length)
             break;
           var d = state.data[i];
+          // update the 'time to station' field!
+          d.timeToStation = (moment(d.expectedArrival) - moment()) / 1000;
           var arrival_text = Lib.format_data(display_format, d);
           arrivals.push(arrival_text);
         }
