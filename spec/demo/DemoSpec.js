@@ -72,6 +72,13 @@ describe("Lib", function() {
     });
   });
 
+  describe("# send_following_arrivals", function() {
+    it("sends following arrivals information", function() {
+      result = Lib.send_following_arrivals("940GZZLUWLO", "bakerloo", ["data", "data2"]);
+      expect(fs.existsSync(result)).toBe(true);
+    });
+  });
+
   describe("# format_data", function() {
     it("merges data items to a format string", function() {
       result = Lib.format_data("towards {towards}", {'towards': "Upminster"});
