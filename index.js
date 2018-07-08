@@ -1,6 +1,7 @@
 var config = require('config');
 const router = require('express')();
 const program = require('commander');
+const fs = require('fs');
 var Lib = require('./lib/Lib');
 
 var PORT = 'port' in config ? config.port : 9000;
@@ -11,8 +12,9 @@ var REQUEST_ERRORS = 0;
 var id_stoppoint = 'default_stoppoint_id' in config ? config.default_stoppoint_id : '940GZZLUWLO';
 var id_line = 'default_line_id' in config ? config.default_line_id : 'bakerloo';
 
-var state = {data: []};
+var state = {raw: "", data: []};
 var updates_on = true; // testing/debugging
+var push_empty_on = true; // whether empty arrivals sets are pushed
 
 // items of interest
 const ioi = [
@@ -28,18 +30,26 @@ const ioi = [
 ];
 
 var push_arrivals = () => {
-  var display_format = 'display_format' in config ? config.display_format :
-                        '{platformName}\n{expectedArrival}: {lineName} -> {towards} | {timeToStation}';
-  var arrivals = [];
-  var arrivals_max = 'following_arrivals_max' in config ? config.following_arrivals_max : 5;
-  for (i = 0; i < arrivals_max; i++) {
-    if (i >= state.data.length)
-      break;
-    var d = state.data[i];
-    var arrival_text = Lib.format_data(display_format, d);
-    arrivals.push(arrival_text);
-  }
-  Lib.send_following_arrivals(id_stoppoint, id_line, arrivals);
+  return Promise.resolve(state.data.length == 0 ? refresh() : true)
+    .then(() => {
+      var arrivals = [];
+      if (state.data.length == 0)
+        console.log(`no arrivals pending. refreshing in ${TIMEOUT} seconds`);
+      else {
+        var display_format = 'display_format' in config ? config.display_format :
+                              '{platformName}\n{expectedArrival}: {lineName} -> {towards} | {timeToStation}';
+        var arrivals_max = 'following_arrivals_max' in config ? config.following_arrivals_max : 5;
+        for (i = 0; i < arrivals_max; i++) {
+          if (i >= state.data.length)
+            break;
+          var d = state.data[i];
+          var arrival_text = Lib.format_data(display_format, d);
+          arrivals.push(arrival_text);
+        }
+      }
+      if (push_empty_on || state.data.length > 0)
+        return Lib.send_following_arrivals(id_stoppoint, id_line, arrivals);
+    });
 }
 
 // remove prediction
@@ -159,25 +169,24 @@ var run = (args) => {
             // short-circuit
             res.send("error updating feed state, check ids!");
         }
-        if ("arrival" in req.query) {
-          var data = Lib.send_arrival(id_stoppoint, id_line, JSON.stringify(state.data));
-          msgs.push(JSON.stringify(data));
-        } else if ("arrivals" in req.query) {
-          var data = Lib.send_arrival(id_stoppoint, id_line, JSON.stringify(state.data));
-          msgs.push(JSON.stringify(data));
-        }
-        res.send(msgs.join("\n"));
+        return Promise.resolve("arrivals" in req.query ? push_arrivals() : false)
+          .then((dump_file) => {
+            if (dump_file) {
+              msgs.push('arrivals:');
+              data = fs.readFileSync(dump_file, 'utf8').split('\n');
+              msgs = msgs.concat(data);
+            }
+            res.send(msgs.join("<br>"));
+            return;
+          });
       });
   });
   router.listen(PORT);
   // push following arrivals on interval
   setInterval(push_arrivals, TIMEOUT * 1000);
 
-  // update state now!
-  Promise.resolve(refresh())
-    .then(() => {
-      push_arrivals();
-    });
+  // update empty state now!
+  push_arrivals();
 }
 
 if (require.main === module)
