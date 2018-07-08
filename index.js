@@ -13,6 +13,19 @@ var id_line_id = 'default_line_id' in config ? config.default_line_id : 'bakerlo
 
 var state = {data: []};
 
+// items of interest
+const ioi = [
+  'id',
+  'lineId',
+  'naptanId',
+  'expectedArrival',
+  'lineName',
+  'platformName',
+  'destinationName',
+  'timeToStation',
+  'towards'
+];
+
 var push_arrivals = () => {
   var display_format = 'display_format' in config ? config.display_format :
                         '{platformName}\n{expectedArrival}: {towards}  | {timeToStation}';
@@ -52,12 +65,31 @@ var queue_announcements = () => {
   }
 }
 
+// process raw json blob
+var process_data = () => {
+  //console.log("processing data");
+  //process.stdout.write(data);
+  var data = [];
+  if (state.raw) {
+    var d = JSON.parse(state.raw);
+    var data = []
+    d.forEach((prediction) => {
+      prediction2 = {};
+      ioi.forEach((i) => { prediction2[i] = prediction[i]; });
+      data.push(prediction2);
+    });
+    data.sort((a, b) => a['timeToStation'] - b['timeToStation']); // in place
+  }
+  state['data'] = data;
+};
+
 var refresh = () => {
   console.log("refreshing arrival predictions for stoppoint-id: " + id_stoppoint + " | line-id: " + id_line);
   return Promise.resolve(Lib.get_data(id_stoppoint, id_line, state))
     .then((data) => {
       if (data == "200") {
         REQUEST_ERRORS = 0;
+        process_data();
         queue_announcements();
       }
       else {
