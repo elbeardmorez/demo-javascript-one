@@ -78,10 +78,17 @@ var queue_announcements = () => {
   for (var i = data.length - 1; i >= 0; i--) {
     var d = data[i];
     var announce_text = Lib.format_data(d, announce_format, time_format);
-    var announce_timer_id = setTimeout(() => {((d, announce_text, update) => {
-        Lib.send_arrival(d.naptanId, d.lineId, announce_text);
-        update(d.id);
-      })(d, announce_text, remove_prediction)}, d.timeToStation * 1000);
+    var announce_timer_id = setTimeout(
+      ((d, announce_text, update) => {
+        return () => {
+          Lib.send_arrival(d.naptanId, d.lineId, announce_text)
+            .then((res) => {
+              update(d.id);
+              return;
+            });
+        }
+      })(Object.assign({}, d), announce_text, remove_prediction),
+      d.timeToStation * 1000);
     d.announce_timer_id = announce_timer_id; // TODO: race condition
   }
 }
