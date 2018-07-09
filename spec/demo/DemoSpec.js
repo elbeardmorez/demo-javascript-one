@@ -16,6 +16,8 @@ describe("Demo", function() {
   var demo = rewire('../../index.js');
   beforeEach(() => {
     demo.__set__('updates_on', false);
+    demo.__set__('id_stoppoint', '940GZZLUWLO');
+    demo.__set__('id_line', 'bakerloo');
   });
 
   describe("# command line args", function() {
@@ -27,11 +29,14 @@ describe("Demo", function() {
 	});
 
  describe("# remove_predictions", function() {
+    beforeAll(() => {
+      jasmine.DEFAULT_TIMEOUT_INTERVAL = 10000;
+    });
+
     beforeEach(() => {
       state = Object.assign({}, data);
       demo.__set__('state', state);
-      jasmine.DEFAULT_TIMEOUT_INTERVAL = 10000;
-    })
+    });
 
     it("removes a predition from the state data", function() {
 			demo.__get__('remove_prediction')('253952329');
@@ -53,6 +58,10 @@ describe("Lib", function() {
   var Lib = require('../../lib/Lib');
   const fs = require('fs');
 
+  beforeAll(() => {
+    jasmine.DEFAULT_TIMEOUT_INTERVAL = 10000;
+  });
+
   describe("# get_data", function() {
     it("gets arrival data from tfl", function(done) {
       var state = {}
@@ -67,15 +76,19 @@ describe("Lib", function() {
 
   describe("# send_arrival", function() {
     it("sends an arrival announcement", function() {
-      result = Lib.send_arrival("940GZZLUWLO", "bakerloo", "data");
-      expect(fs.existsSync(result)).toBe(true);
+      Lib.send_arrival("940GZZLUWLO", "bakerloo", "data")
+        .then((res) => {
+          expect(fs.existsSync(res)).toBe(true);
+        });
     });
   });
 
   describe("# send_following_arrivals", function() {
     it("sends following arrivals information", function() {
-      result = Lib.send_following_arrivals("940GZZLUWLO", "bakerloo", ["data", "data2"]);
-      expect(fs.existsSync(result)).toBe(true);
+      Lib.send_following_arrivals("940GZZLUWLO", "bakerloo", ["data", "data2"])
+        .then((res) => {
+          expect(fs.existsSync(res)).toBe(true);
+        });
     });
   });
 
