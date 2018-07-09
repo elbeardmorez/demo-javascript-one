@@ -166,6 +166,8 @@ var run = (args) => {
       .then((data) => {
         if (data) {
           if (data == "200") {
+            process_data();
+            queue_announcements();
             // set global ids
             id_stoppoint = req.query.stoppoint_id || id_stoppoint;
             id_line = req.query.line_id || id_line;
